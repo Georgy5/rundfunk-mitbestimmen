@@ -4,6 +4,9 @@ class GeocodeUserJob < ApplicationJob
   def perform(auth0_uid, access_token = nil)
     return unless auth0_uid
 
+    ipstack_api_key = Geocoder.config[:ipstack][:api_key]
+    return if ipstack_api_key.blank? || (ipstack_api_key == 'IPSTACK_API_KEY')
+
     user = User.find_by(auth0_uid: auth0_uid)
     return unless user
 
